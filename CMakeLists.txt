@@ -3,4 +3,4 @@ project(OS_Project___1 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(OS_Project___1 main.c)
+add_executable(OS_Project___1 MainProcess.c)

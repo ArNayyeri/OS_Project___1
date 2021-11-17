@@ -1,4 +1,12 @@
 #include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/wait.h>
 
 void replace(char word[], char text[], int a) {
     text[a] = word[0];
@@ -22,4 +30,43 @@ void place(char finder[1000][1000], char text[]) {
     fp = fopen("Placer Text.txt", "w");
     fprintf(fp, "%s", text);
     fclose(fp);
+}
+
+
+int main() {
+    char text[10000], finder[1000][1000], buff[1000];
+
+
+    mkfifo("myfifoBC", 0777);
+    int fd = open("myfifoBC", O_RDONLY);
+    read(fd, buff, sizeof(buff));
+    close(fd);
+
+
+    printf("%s\n", buff);
+    for (long long int i = 0, j = 0, r = 0; buff[i] != '\0'; ++i) {
+        if (buff[i] == '#') {
+            for (int k = r; k < r + i; ++k) {
+                finder[j][k - r] = buff[k];
+            }
+            finder[j++][i - r] = '\0';
+            printf("%lld -> %lld : %s\n", r, i, finder[j - 1]);
+            r = i + 1;
+        }
+    }
+
+
+    mkfifo("myfifoC", 0777);
+    fd = open("myfifoC", O_RDONLY);
+    read(fd, text, sizeof(text));
+    close(fd);
+
+    place(finder, text);
+
+    mkfifo("myfifoC", 0777);
+    fd = open("myfifoC", O_WRONLY);
+    write(fd, text, strlen(text));
+    close(fd);
+
+    return 0;
 }

@@ -1,4 +1,12 @@
 #include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/wait.h>
 
 char changeLetter(char c) {
     if ((c <= 'Z' && c >= 'X') || (c <= 'z' && c >= 'x'))
@@ -14,4 +22,24 @@ void decode(char text[]) {
     fp = fopen("Decode Text.txt", "w");
     fprintf(fp, "%s", text);
     fclose(fp);
+}
+
+int main() {
+    mkfifo("myfifoA", 0777);
+    int fd = open("myfifoA", O_RDONLY);
+    char text[10000];
+    read(fd, text, sizeof(text));
+    close(fd);
+
+
+    decode(text);
+
+
+    mkfifo("myfifoAB", 0777);
+    fd = open("myfifoAB", O_WRONLY);
+    write(fd, text, strlen(text));
+    close(fd);
+
+
+    return 0;
 }
