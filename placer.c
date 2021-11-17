@@ -43,14 +43,12 @@ int main() {
     close(fd);
 
 
-    printf("%s\n", buff);
     for (long long int i = 0, j = 0, r = 0; buff[i] != '\0'; ++i) {
         if (buff[i] == '#') {
             for (int k = r; k < r + i; ++k) {
                 finder[j][k - r] = buff[k];
             }
             finder[j++][i - r] = '\0';
-            printf("%lld -> %lld : %s\n", r, i, finder[j - 1]);
             r = i + 1;
         }
     }
