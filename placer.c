@@ -8,12 +8,15 @@
 #include <errno.h>
 #include <sys/wait.h>
 
-void replace(char word[], char text[], int a) {
+void replace(char word[], char text[], int a)
+{
     text[a] = word[0];
-    for (int i = 1; word[i] != '\0'; i++) {
+    for (int i = 1; word[i] != '\0'; i++)
+    {
         char x = word[i];
         int j;
-        for (j = a + i; text[j] != '\0'; j++) {
+        for (j = a + i; text[j] != '\0'; j++)
+        {
             char c = x;
             x = text[j];
             text[j] = c;
@@ -22,7 +25,8 @@ void replace(char word[], char text[], int a) {
     }
 }
 
-void place(char finder[1000][1000], char text[]) {
+void place(char finder[1000][1000], char text[])
+{
     for (long long int i = 0, j = 0; text[i] != '\0'; i++)
         if (text[i] == '$')
             replace(finder[j++], text, i);
@@ -32,27 +36,27 @@ void place(char finder[1000][1000], char text[]) {
     fclose(fp);
 }
 
-
-int main() {
+int main()
+{
     char text[10000], finder[1000][1000], buff[1000];
-
 
     mkfifo("myfifoBC", 0777);
     int fd = open("myfifoBC", O_RDONLY);
     read(fd, buff, sizeof(buff));
     close(fd);
 
-
-    for (long long int i = 0, j = 0, r = 0; buff[i] != '\0'; ++i) {
-        if (buff[i] == '#') {
-            for (int k = r; k < r + i; ++k) {
+    for (long long int i = 0, j = 0, r = 0; buff[i] != '\0'; ++i)
+    {
+        if (buff[i] == '#')
+        {
+            for (int k = r; k < r + i; ++k)
+            {
                 finder[j][k - r] = buff[k];
             }
             finder[j++][i - r] = '\0';
             r = i + 1;
         }
     }
-
 
     mkfifo("myfifoC", 0777);
     fd = open("myfifoC", O_RDONLY);
