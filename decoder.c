@@ -9,9 +9,9 @@
 #include <sys/wait.h>
 
 char changeLetter(char c) {
-    if ((c <= 'Z' && c >= 'X') || (c <= 'z' && c >= 'x'))
-        return c - 23;
-    return c + 3;
+    if ((c <= 'C' && c >= 'A') || (c <= 'c' && c >= 'a'))
+        return c + 23;
+    return c - 3;
 }
 
 void decode(char text[]) {
