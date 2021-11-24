@@ -30,7 +30,7 @@ void place(char finder[1000][1000], char text[])
     for (long long int i = 0, j = 0; text[i] != '\0'; i++)
         if (text[i] == '$')
             replace(finder[j++], text, i);
-    FILE *fp;
+    FILE* fp;
     fp = fopen("Placer Text.txt", "w");
     fprintf(fp, "%s", text);
     fclose(fp);

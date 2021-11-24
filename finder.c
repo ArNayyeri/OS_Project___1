@@ -56,7 +56,7 @@ long long int find(char decode[], char text[], char word[1000][1000])
                 b = b * 10 + (text[i] - '0');
         }
     }
-    FILE *fp;
+    FILE* fp;
     fp = fopen("Finder Text.txt", "w");
     for (long long int i = 0; i < S; i++)
     {

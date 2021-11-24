@@ -8,22 +8,6 @@
 #include <errno.h>
 #include <sys/wait.h>
 
-void stringConnect(char str[10000], char buff[1000])
-{
-    int i;
-    for (i = 0; i < 10000; ++i)
-    {
-        if (str[i] == '\0')
-            break;
-    }
-    for (int j = 0; j < 1000; ++j)
-    {
-        str[i + j] = buff[j];
-        if (buff[j] == '\0')
-            break;
-    }
-}
-
 int main()
 {
     int status;
@@ -56,17 +40,17 @@ int main()
     }
     if (A == 0)
     {
-        char *args[] = {"./decoder", NULL};
+        char* args[] = { "./decoder", NULL };
         execvp(args[0], args);
     }
     else if (B == 0)
     {
-        char *args[] = {"./finder", NULL};
+        char* args[] = { "./finder", NULL };
         execvp(args[0], args);
     }
     else if (C == 0)
     {
-        char *args[] = {"./placer", NULL};
+        char* args[] = { "./placer", NULL };
         execvp(args[0], args);
     }
     else
@@ -76,17 +60,17 @@ int main()
         str1[0] = '\0';
         str2[0] = '\0';
         str3[0] = '\0';
-        FILE *fp;
+        FILE* fp;
         fp = fopen("Text.txt", "r");
         while (1)
         {
             fscanf(fp, "%s", buff);
             if (strcmp(buff, "###") == 0)
                 break;
-            stringConnect(str1, buff);
+            strcat(str1, buff);
         }
-        fgets(buff, 1000, (FILE *)fp);
-        fgets(str2, 10000, (FILE *)fp);
+        fgets(buff, 1000, (FILE*)fp);
+        fgets(str2, 10000, (FILE*)fp);
         for (int i = 0; i < 10000; i++)
         {
             if (str2[i] == '\n')
@@ -97,9 +81,9 @@ int main()
             else if (str2[i] == '\0')
                 break;
         }
-        fgets(buff, 1000, (FILE *)fp);
+        fgets(buff, 1000, (FILE*)fp);
         while (fgets(buff, 1000, fp) != NULL)
-            stringConnect(str3, buff);
+            strcat(str3, buff);
         for (int i = 0; i < 10000; i++)
         {
             if (str3[i] == '\n' && str3[i + 1] == '\0')
@@ -137,6 +121,12 @@ int main()
         close(fd);
 
         waitpid(C, &status, 0);
+
+        remove("myfifoA");
+        remove("myfifoB");
+        remove("myfifoC");
+        remove("myfifoAB");
+        remove("myfifoBC");
 
         printf("%s", str1);
     }
